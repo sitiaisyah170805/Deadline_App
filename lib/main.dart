@@ -3,8 +3,18 @@ import 'package:deadlineapp/screens/home_screen.dart';
 import 'package:deadlineapp/screens/calendar_screen.dart';
 import 'package:deadlineapp/screens/analytics_screen.dart';
 import 'package:deadlineapp/screens/settings_screen.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
-void main(){
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Hive.initFlutter();
+  // await Hive.openBox('taskBox');
+  await Hive.openBox("homeworkBox");
+  await Hive.openBox("activityBox");
+  await Hive.openBox("habitBox");
+  await Hive.openBox("goalBox");
+
   runApp(const DeadlineApp());
 }
 
