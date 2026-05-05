@@ -1,3 +1,4 @@
+import 'package:deadlineapp/screens/task_category_screen.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget{
@@ -86,17 +87,18 @@ class HomeScreen extends StatelessWidget{
                     style: TextStyle(fontSize: 15),
                   ),
                   const SizedBox(height: 20),
+                  //menu grid
                   Column(
                     children: [
                       Row(
                         children: [
-                          Expanded(child: _menuBox("Homework",
+                          Expanded(child: _menuBox(context, "Homework",
                           Icons.book,
                           Colors.blue[100]!,
                           ),
                           ),
                           const SizedBox(width: 15),
-                          Expanded(child: _menuBox("Activity",
+                          Expanded(child: _menuBox(context, "Activity",
                           Icons.event,
                           Colors.orange[100]!,
                           ),
@@ -107,13 +109,13 @@ class HomeScreen extends StatelessWidget{
 
                       Row(
                         children: [
-                          Expanded(child: _menuBox("Habit",
+                          Expanded(child: _menuBox(context, "Habit",
                           Icons.check_circle,
                           Colors.green[100]!,
                           ),
                           ),
                           const SizedBox(width: 15),
-                          Expanded(child: _menuBox("Goal",
+                          Expanded(child: _menuBox(context, "Goal",
                           Icons.track_changes,
                           Colors.purple[100]!,
                           ),
@@ -136,8 +138,44 @@ class HomeScreen extends StatelessWidget{
 
 
   //menu box
-  Widget _menuBox(String title, IconData icon, Color color){
-    return Container(
+  // Widget _menuBox(String title, IconData icon, Color color){
+  //   return Container(
+  //     height: 140,
+  //     decoration: BoxDecoration(
+  //       color: color,
+  //       borderRadius: BorderRadius.circular(17),
+  //     ),
+  //     child: Column(
+  //       mainAxisAlignment: MainAxisAlignment.center,
+  //       children: [
+  //         Icon(icon, size: 30, color: Colors.black54),
+  //         const SizedBox(height: 8),
+  //         Text(
+  //           title,
+  //           style: const TextStyle(fontWeight: FontWeight.bold),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
+
+Widget _menuBox(
+  BuildContext content,
+  String title,
+  IconData icon,
+  Color color,
+) {
+  return InkWell(
+    borderRadius: BorderRadius.circular(17),
+    onTap:  () {
+      Navigator.push(
+      content,
+      MaterialPageRoute(
+      builder: (context) => TaskCategoryScreen(title: title),
+      ),
+      );
+    },
+    child: Container(
       height: 140,
       decoration: BoxDecoration(
         color: color,
@@ -151,9 +189,10 @@ class HomeScreen extends StatelessWidget{
           Text(
             title,
             style: const TextStyle(fontWeight: FontWeight.bold),
-          ),
+          )
         ],
       ),
-    );
-  }
+    ),
+  );
+}
 }
