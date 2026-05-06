@@ -14,6 +14,7 @@ class _TaskCategoryScreenState extends State<TaskCategoryScreen> {
   // final Box box = Hive.box('tasksBox');
   late final Box box;
 
+  @override
   void initState() {
     super.initState();
 
@@ -58,7 +59,11 @@ class _TaskCategoryScreenState extends State<TaskCategoryScreen> {
           ElevatedButton(
             onPressed: () {
               if (controller.text.isNotEmpty) {
-                box.add(controller.text);
+                // box.add(controller.text);
+                box.add({
+                  "title": controller.text,
+                  "done": false,
+                });
               }
               Navigator.pop(context);
             },
@@ -91,36 +96,56 @@ class _TaskCategoryScreenState extends State<TaskCategoryScreen> {
             itemBuilder: (context, index) {
               final task = box.getAt(index);
 
-              return Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
+              return Dismissible(
+                key: Key(task['title'] + index.toString()),
+                onDismissed: (direction){
+                  box.deleteAt(index);
+                },
+                background: Container(
+                  color: Colors.red,
+                  alignment: Alignment.centerRight,
+                  padding: const EdgeInsets.only(right: 20),
+                  child: const Icon(Icons.delete, color: Colors.white),
                 ),
-                child: ListTile(
-                  leading: const Icon(Icons.assignment, color: Colors.teal),
-                  title: Text(task),
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: ListTile(
+                    leading: Checkbox(value: task['done']?? false,
+                    onChanged: (value) {
+                      box.putAt(index, {
+                        "title": task['title'] ?? '',
+                        "done": value ?? false,
+                      });
+                    },
+                    ),
+                    title: Text(
+                      task['title'] ?? '',
+                      style: TextStyle(
+                        decoration: (task['done'] ?? false)
+                        ? TextDecoration.lineThrough
+                        : TextDecoration.none,
+                      ),
+                    ),
+                  ),
                 ),
-              );
+                );
+
+              // return Card(
+              //   shape: RoundedRectangleBorder(
+              //     borderRadius: BorderRadius.circular(15),
+              //   ),
+              //   child: ListTile(
+              //     leading: const Icon(Icons.assignment, color: Colors.teal),
+              //     title: Text(task),
+              //   ),
+              // );
             }
           );
         }
       ),
-      // body: tasks.isEmpty
-      //     ? const Center(child: Text("Belum ada tugas"))
-      //     : ListView.builder(
-      //         padding: const EdgeInsets.all(16),
-      //         itemCount: tasks.length,
-      //         itemBuilder: (context, index) {
-      //           return Card(
-      //             shape: RoundedRectangleBorder(
-      //               borderRadius: BorderRadius.circular(15),
-      //             ),
-      //             child: ListTile(
-      //               leading: const Icon(Icons.assignment, color: Colors.teal),
-      //               title: Text(tasks[index]),
-      //             ),
-      //           );
-      //         },
-      //       ),
+      
       floatingActionButton: FloatingActionButton(
         onPressed: _showAddDialog,
         backgroundColor: Colors.teal[800],
