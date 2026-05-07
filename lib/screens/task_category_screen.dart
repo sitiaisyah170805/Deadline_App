@@ -13,6 +13,14 @@ class TaskCategoryScreen extends StatefulWidget {
 class _TaskCategoryScreenState extends State<TaskCategoryScreen> {
   // final Box box = Hive.box('tasksBox');
   late final Box box;
+  DateTime selectedDate = DateTime.now();
+
+  final ScrollController _scrollController =ScrollController();
+
+  String _getDayName(DateTime date) {
+    List days = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
+    return days[date.weekday - 1];
+  }
 
   @override
   void initState() {
@@ -34,6 +42,9 @@ class _TaskCategoryScreenState extends State<TaskCategoryScreen> {
     default:
       box = Hive.box('homeworkBox');
   }
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    _scrollController.jumpTo(15 * 86.0);
+  });
   }
 
   
@@ -83,7 +94,76 @@ class _TaskCategoryScreenState extends State<TaskCategoryScreen> {
         backgroundColor: Colors.teal[800],
         foregroundColor: Colors.white,
       ),
-      body: ValueListenableBuilder(
+ // Date Horizontal
+      body: Column(
+        children: [
+
+          SizedBox(
+            height: 95,
+            child: ListView.builder(
+              controller: _scrollController,
+              scrollDirection: Axis.horizontal,
+              itemCount: 30,
+              itemBuilder: (context, index) {
+                DateTime date =DateTime.now().add(Duration(days: index - 15));
+
+                bool isToday =
+                date.day == DateTime.now().day &&
+                date.month == DateTime.now().month &&
+                date.year == DateTime.now().year;
+
+                bool isSelected =
+                date.day == selectedDate.day &&
+                date.month == selectedDate.month &&
+                date.year == selectedDate.year;
+
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      selectedDate = date;
+                    });
+                  },
+                  child: Container(
+                    width: 70,
+                    margin: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: isSelected
+                      ? Colors.purple.shade100
+                      : isToday
+                      ?Colors.teal: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          _getDayName(date),
+                          style: TextStyle(
+                            color:isSelected || isToday
+                            ? Colors.white
+                            : Colors.black54,
+                          ),
+                        ),
+                        const SizedBox(height:5),
+                        Text(
+                          date.day.toString(),
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color:isSelected || isToday
+                            ? Colors.white
+                            : Colors.black,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                );
+              },
+              ),
+          ),
+
+    Expanded(
+      child: ValueListenableBuilder(
         valueListenable: box.listenable(),
         builder: (context, Box box, _) {
 
@@ -94,11 +174,11 @@ class _TaskCategoryScreenState extends State<TaskCategoryScreen> {
             padding: const EdgeInsets.all(16),
             itemCount: box.length,
             itemBuilder: (context, index) {
-              final task = box.getAt(index);
+              final task = box.getAt(index) as Map;
 
               return Dismissible(
-                key: Key(task['title'] + index.toString()),
-                onDismissed: (direction){
+                key: Key(index.toString()),
+                onDismissed: (_) {
                   box.deleteAt(index);
                 },
                 background: Container(
@@ -131,19 +211,12 @@ class _TaskCategoryScreenState extends State<TaskCategoryScreen> {
                   ),
                 ),
                 );
-
-              // return Card(
-              //   shape: RoundedRectangleBorder(
-              //     borderRadius: BorderRadius.circular(15),
-              //   ),
-              //   child: ListTile(
-              //     leading: const Icon(Icons.assignment, color: Colors.teal),
-              //     title: Text(task),
-              //   ),
-              // );
             }
           );
-        }
+        },
+      ),
+    ),
+    ],
       ),
       
       floatingActionButton: FloatingActionButton(
