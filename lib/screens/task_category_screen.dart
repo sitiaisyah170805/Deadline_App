@@ -74,6 +74,7 @@ class _TaskCategoryScreenState extends State<TaskCategoryScreen> {
                 box.add({
                   "title": controller.text,
                   "done": false,
+                  "date": selectedDate.toString(),
                 });
               }
               Navigator.pop(context);
