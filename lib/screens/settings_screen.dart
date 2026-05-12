@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-class SettingScreen extends StatefulWidget {
-  const SettingScreen({super.key});
+class SettingsScreen extends StatefulWidget {
+  const SettingsScreen({super.key});
 
   @override
-  State<SettingScreen> createState() => _SettingsScreenState();
+  State<SettingsScreen> createState() => _SettingsScreenState();
 }
 
-class _SettingsScreenState extends State<SettingScreen> {
+class _SettingsScreenState extends State<SettingsScreen> {
 
   late final Box settingsBox;
 
@@ -96,7 +96,9 @@ class _SettingsScreenState extends State<SettingScreen> {
               style: TextStyle(
                 fontSize: 30,
                 fontWeight: FontWeight.bold,
-                color: Colors.grey[800],
+                color: Theme.of(context)
+                    .colorScheme
+                    .onSurface,
               ),
             ),
 
@@ -119,7 +121,7 @@ class _SettingsScreenState extends State<SettingScreen> {
               padding: const EdgeInsets.all(20),
 
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Colors.orange[100],
                 borderRadius: BorderRadius.circular(25),
 
                 boxShadow: [

@@ -92,7 +92,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
     return Scaffold(
 
-      backgroundColor: Colors.grey[100],
+      backgroundColor: Theme.of(context)
+        .scaffoldBackgroundColor,
 
       appBar: AppBar(
         title: const Text("Deadline Calendar"),
@@ -113,7 +114,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
             padding: const EdgeInsets.all(12),
 
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Colors.teal[100],
               borderRadius: BorderRadius.circular(20),
 
               boxShadow: [
@@ -185,7 +186,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   style: TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
-                    color: Colors.grey[800],
+                    color:Theme.of(context)
+                    .colorScheme
+                    .onSurface,
                   ),
                 ),
 
@@ -215,8 +218,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
                         Icon(
                           Icons.event_note,
-                          size: 70,
-                          color: Colors.grey[400],
+                          size: 68,
+                          color: Colors.grey,
                         ),
 
                         const SizedBox(height: 15),

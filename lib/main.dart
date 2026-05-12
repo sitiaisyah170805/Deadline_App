@@ -1,79 +1,152 @@
+
 import 'package:flutter/material.dart';
-import 'package:deadlineapp/screens/home_screen.dart';
-import 'package:deadlineapp/screens/calendar_screen.dart';
-import 'package:deadlineapp/screens/analytics_screen.dart';
-import 'package:deadlineapp/screens/settings_screen.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+import 'navigation_menu.dart';
+
 void main() async {
+
   WidgetsFlutterBinding.ensureInitialized();
 
   await Hive.initFlutter();
-  // await Hive.openBox('taskBox');
-  await Hive.openBox("homeworkBox");
-  await Hive.openBox("activityBox");
-  await Hive.openBox("habitBox");
-  await Hive.openBox("goalBox");
 
-  runApp(const DeadlineApp());
+  // 📦 OPEN BOXES
+  await Hive.openBox('homeworkBox');
+  await Hive.openBox('activityBox');
+  await Hive.openBox('habitBox');
+  await Hive.openBox('goalBox');
+  await Hive.openBox('settingsBox');
+
+  runApp(const MyApp());
 }
 
-class DeadlineApp extends StatelessWidget {
-  const DeadlineApp({super.key});
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Deadline',
-      theme: ThemeData(
-        primarySwatch: Colors.teal,
-        scaffoldBackgroundColor: const Color(0xFFF5F7F8),
-      ),
-      home: const MainNavigation(),
-    );
-  }
-}
 
-class MainNavigation extends StatefulWidget {
-  const MainNavigation({super.key});
+    return ValueListenableBuilder(
 
-  @override
-  State<MainNavigation> createState() => _MainNavigationState();
-    }
-class _MainNavigationState extends State<MainNavigation> {
-  int _selectedIndex = 0;
+      valueListenable:
+          Hive.box('settingsBox').listenable(),
 
-  final List<Widget> _pages = const [
-    HomeScreen(),
-    CalendarScreen(),
-    AnalyticsScreen(),
-    SettingsScreen(),
-  ];
+      builder: (context, box, _) {
 
-  void _onItemTapped (int index) {
-    setState((){
-      _selectedIndex = index;
-    });
-  }
+        bool isDarkMode =
+            box.get(
+              'darkMode',
+              defaultValue: false,
+            );
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: _pages[_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: Colors.teal,
-        unselectedItemColor: Colors.grey,
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.calendar_today), label: 'Calendar'),
-          BottomNavigationBarItem(icon: Icon(Icons.bar_chart), label: 'Analytics'),
-          BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
-        ]
-      ),
-    );
-  }
-}
+        return MaterialApp(
+
+          debugShowCheckedModeBanner: false,
+
+          title: 'Deadline',
+
+          // 🌙 THEME MODE
+          themeMode:
+              isDarkMode
+                  ? ThemeMode.dark
+                  : ThemeMode.light,
+
+          // ☀ LIGHT THEME
+          theme: ThemeData(
+
+            brightness: Brightness.light,
+
+            primarySwatch: Colors.teal,
+
+            scaffoldBackgroundColor:
+                const Color(0xFFF5F7F8),
+
+            appBarTheme: AppBarTheme(
+              backgroundColor: Colors.teal[800],
+              foregroundColor: Colors.white,
+              elevation: 0,
+            ),
+
+            navigationBarTheme:
+                NavigationBarThemeData(
+
+              backgroundColor: Colors.white,
+
+              indicatorColor:
+                  Colors.teal.shade100,
+
+              labelTextStyle:
+                  WidgetStateProperty.all(
+
+                const TextStyle(
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+
+            useMaterial3: true,
+          ),
+          
+          darkTheme: ThemeData(
+
+            brightness: Brightness.dark,
+
+          scaffoldBackgroundColor:
+              const Color(0xFF121212),
+              
+
+            textTheme: const TextTheme(
+
+            bodyLarge: TextStyle(
+              color: Colors.black,
+            ),
+
+            bodyMedium: TextStyle(
+              color: Colors.black,
+            ),
+          ),
+
+          appBarTheme: const AppBarTheme(
+            backgroundColor: Colors.black,
+            foregroundColor: Colors.white,
+            elevation: 0,
+          ),
+
+          navigationBarTheme:
+              NavigationBarThemeData(
+
+            backgroundColor:
+                const Color(0xFF1E1E1E),
+
+            indicatorColor: Colors.teal,
+
+            iconTheme:
+            WidgetStateProperty.all(
+
+              const IconThemeData(
+                color: Colors.white,
+              ),
+            ),
+
+
+            labelTextStyle:
+                WidgetStateProperty.all(
+
+              const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+
+          useMaterial3: true,
+        ),
+
+                  home: const NavigationMenu(),
+                );
+              },
+            );
+          }
+        }
+
+

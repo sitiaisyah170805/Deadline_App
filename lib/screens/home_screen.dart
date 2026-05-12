@@ -6,7 +6,8 @@ class HomeScreen extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context)
+        .scaffoldBackgroundColor,
       body: SafeArea(child: SingleChildScrollView(
         child: Column(
           children: [
@@ -53,6 +54,7 @@ class HomeScreen extends StatelessWidget{
                   left: 20,
                   right: 20,
                   child: Card(
+                    color: Colors.teal[100],
                     elevation: 10,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),

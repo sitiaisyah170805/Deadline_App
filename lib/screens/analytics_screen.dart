@@ -85,7 +85,8 @@ Color getCategoryColor(String category) {
 
     return Scaffold(
 
-      backgroundColor: Colors.grey[100],
+      backgroundColor:Theme.of(context)
+        .scaffoldBackgroundColor,
 
       appBar: AppBar(
         title: const Text("Task Analytics"),
@@ -111,7 +112,9 @@ Color getCategoryColor(String category) {
               style: TextStyle(
                 fontSize: 26,
                 fontWeight: FontWeight.bold,
-                color: Colors.grey[800],
+                color:Theme.of(context)
+                    .colorScheme
+                    .onSurface,
               ),
             ),
 
@@ -161,7 +164,9 @@ Color getCategoryColor(String category) {
               style: TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
-                color: Colors.grey[800],
+                color: Theme.of(context)
+                    .colorScheme
+                    .onSurface,
               ),
             ),
 
@@ -172,7 +177,7 @@ Color getCategoryColor(String category) {
               padding: const EdgeInsets.all(20),
 
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Colors.orange,
                 borderRadius: BorderRadius.circular(20),
 
                 boxShadow: [
@@ -224,7 +229,9 @@ Color getCategoryColor(String category) {
               style: TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
-                color: Colors.grey[800],
+                color: Theme.of(context)
+                    .colorScheme
+                    .onSurface,
               ),
             ),
 
@@ -277,7 +284,7 @@ Color getCategoryColor(String category) {
       padding: const EdgeInsets.all(24),
 
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Colors.teal[100],
         borderRadius: BorderRadius.circular(24),
 
         boxShadow: [
@@ -342,7 +349,7 @@ Color getCategoryColor(String category) {
       padding: const EdgeInsets.all(20),
 
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Colors.orange[100],
         borderRadius: BorderRadius.circular(20),
 
         boxShadow: [
